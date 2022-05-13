@@ -29,9 +29,9 @@ async function scrapeMain(url,page) {
     result = $('.product-type-variable').map((index,element) =>{
         
         const titleElement = $(element).find(".woocommerce-loop-product__title");
-        const urlElement = $(element).find(".woocommerce-loop-product__link");
+        const urlElement = $(element).find(".product-wrap").find("a");
         
-        const id = $(element).attr("class").split(" ")[2].split("-")[1];;
+        const id = $(element).attr("class").split(" ")[3].split("-")[1];
         const title = titleElement.text();
         const business_name = $("title").text().split("-")[1].trim(); 
         const url = urlElement.attr('href');
@@ -172,7 +172,11 @@ async function main()
     const cleaned_info = await removeDuplicates(products_info);
     const data = JSON.stringify(cleaned_info);
 
+<<<<<<< Updated upstream
     await writeJSOn("./nge.json",data);
+=======
+    await writeJSOn("nge.json",data);
+>>>>>>> Stashed changes
   
 }
 

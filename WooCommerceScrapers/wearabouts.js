@@ -2,8 +2,15 @@ const cheerio = require('cheerio');
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 
-const clothes_url = "https://wearabouts.ca/product-category/women";
-const shoes_url = "https://wearabouts.ca/product-category/womens-footwear";
+const dresses_url = "https://wearabouts.ca/product-category/women/dresses-and-skirts/";
+const jackets_url = "https://wearabouts.ca/product-category/women/jackets-outerwear/";
+const bottoms_url = "https://wearabouts.ca/product-category/women/pants-leggings-capris/";
+const clothes_url = "https://wearabouts.ca/product-category/women/rompers/";
+const tops_url = "https://wearabouts.ca/product-category/women/shirts-tops/";
+const shorts_url = "https://wearabouts.ca/product-category/women/shorts/";
+const boots_url = "https://wearabouts.ca/product-category/womens-footwear/boots/";
+const sandals_url = "https://wearabouts.ca/product-category/womens-footwear/sandals/";
+const shoes_url = "https://wearabouts.ca/product-category/womens-footwear/shoes/";
 
 let finalres = [];
 
@@ -21,8 +28,7 @@ async function scrapeMain(url,page) {
     //pagination loop
     for(let i = 1; i <= end_page; i++){
     
-    
-    await page.goto(url +'/page/'+ i +'/');
+    await page.goto(url + '/page/' + i + '/');
     const html = await page.content();
     const $ = await cheerio.load(html);
    
@@ -31,10 +37,12 @@ async function scrapeMain(url,page) {
         
         //sleep to limit requests
         const titleElement = $(element).find(".woocommerce-loop-product__title");
+      
         const urlElement = $(element).find(".woocommerce-loop-product__link");
         
         const id = $(element).attr("class").split(" ")[2].split("-")[1];
         const title = titleElement.text();
+        
 
         let business_name = "";
         if(i == 1)
@@ -56,6 +64,7 @@ async function scrapeMain(url,page) {
     }
 
   finalres = finalres.flat();
+  
   return finalres;
 }
 
@@ -64,8 +73,8 @@ async function scrapeSecondary(item,page)
 {
     
     for(var i=0;i<item.length;i++){
-
-        await page.goto(item[i].url)
+        console.log(item[i].url);
+        await page.goto(item[i].url);
         const html = await page.content();
         const $ = await cheerio.load(html);
         await sleep(1000);
@@ -209,7 +218,16 @@ async function get_pagination_end(url,page)
     const html = await page.content();
     const $ = await cheerio.load(html);
 
-    const last_page = $(".page-numbers li:nth-last-child(2)").text();
+    let last_page = $(".page-numbers li:nth-last-child(2)").text();
+
+    if(last_page == '')
+    {
+        last_page=1;
+    }
+    else
+    {
+       last_page = parseInt(last_page);
+    }
 
     return last_page;
 }
@@ -222,12 +240,23 @@ async function main()
     const page = await browser.newPage();
 
     //scrape clothing
-    const clothing_title_and_url = await scrapeMain(clothes_url,page);
+    const dress_title_and_url = await scrapeMain(dresses_url,page);
+    const jackets_title_and_url = await scrapeMain(jackets_url,page);
+    const bottoms_title_and_url = await scrapeMain(bottoms_url,page);
+    const romper_title_and_url = await scrapeMain(clothes_url,page);
+    const tops_title_and_url = await scrapeMain(tops_url,page);
+    const shorts_title_and_url = await scrapeMain(shorts_url,page);
+    const boots_title_and_url = await scrapeMain(boots_url,page);
+    const sandals_title_and_url = await scrapeMain(sandals_url,page);
     const shoes_title_and_url = await scrapeMain(shoes_url,page);
     const items_info = await scrapeSecondary(shoes_title_and_url,page);
     const data = JSON.stringify(items_info);
 
+<<<<<<< Updated upstream
     await writeJSOn("./wearabouts.json",data);
+=======
+    await writeJSOn("wearabouts.json",data);
+>>>>>>> Stashed changes
 
 }
 

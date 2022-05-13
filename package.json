@@ -1,9 +1,6 @@
 {
-  "name": "2022-webscraper-project",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
   "dependencies": {
+<<<<<<< Updated upstream
     "axios": "^0.26.0",
     "cheerio": "^1.0.0-rc.10",
     "fs": "^0.0.1-security",
@@ -25,4 +22,9 @@
     "url": "https://github.com/justin-howson/2022-Webscraper-Project/issues"
   },
   "homepage": "https://github.com/justin-howson/2022-Webscraper-Project#readme"
+=======
+    "cheerio": "^1.0.0-rc.10",
+    "puppeteer": "^11.0.0"
+  }
+>>>>>>> Stashed changes
 }
